@@ -1,0 +1,24 @@
+SELECT 
+    od.org_id,
+    od.org_name,
+    od.org_slug,
+    od.base_plan,
+    od.features,
+    od.subscription_duration,
+    od.id as dataflow_id,
+    od.name as dataflow_name,
+    od.dataflow_type,
+    od.deployment_id,
+    od.deployment_name as dataflow_deployment_name,
+    fr.flow_run_id,
+    fr.flow_run_name,
+    fr.state_type,
+    fr.state_name,
+    fr.start_time,
+    fr.expected_start_time,
+    fr.end_time,
+    fr.total_run_time,
+    fr.work_queue_id
+FROM {{ ref('org_dataflows') }} od
+LEFT JOIN {{ ref('flow_runs') }} fr 
+    ON od.deployment_id = fr.deployment_id

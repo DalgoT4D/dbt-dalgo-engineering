@@ -1,0 +1,30 @@
+version: 2
+
+sources:
+  - name: django
+    schema: staging_django
+    tables:
+      - name: orgs
+        identifier: ddpui_org
+      - name: dataflows
+        identifier: ddpui_orgdataflowv1
+      
+      - name: orgtasks
+        identifier: ddpui_orgtask
+
+      - name: orgplans
+        identifier: ddpui_orgplans
+  
+  - name: prefect
+    schema: staging_prefect
+    tables:
+      - name: deployment
+        identifier: deployment
+      - name: flow_run
+        identifier: flow_run
+      
+      - name: work_pool
+        identifier: work_pool
+
+      - name: work_queue
+        identifier: work_queue

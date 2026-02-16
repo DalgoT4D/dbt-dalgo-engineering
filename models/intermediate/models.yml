@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: all_orgs
+    description: "Combined organizations and their plans data"
+    columns:
+      - name: org_slug
+        description: "Organization slug identifier"
+        tests:
+          - unique
+          - not_null
+  - name: deployments
+    description: "Prefect deployments with organization information"
+    columns:
+      - name: org_slug
+        description: "Organization slug extracted from deployment tags"
+        tests:
+          - not_null
