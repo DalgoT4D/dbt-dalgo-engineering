@@ -5,6 +5,8 @@ SELECT
     o.created_at as org_created_at,
     o.updated_at as org_updated_at,
     o.queue_config as queue_config,
+    o.viz_url as viz_url,
+    o.viz_login_type as viz_login_type,
     p.base_plan as base_plan,
     p.features as features,
     p.subscription_duration as subscription_duration,
