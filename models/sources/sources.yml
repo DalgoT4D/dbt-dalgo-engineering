@@ -6,9 +6,14 @@ sources:
     tables:
       - name: orgs
         identifier: ddpui_org
+      - name: orgusers
+        identifier: ddpui_orguser
+      - name: users
+        identifier: auth_user
+      - name: roles
+        identifier: ddpui_role
       - name: dataflows
         identifier: ddpui_orgdataflowv1
-      
       - name: orgtasks
         identifier: ddpui_orgtask
 
