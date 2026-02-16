@@ -29,7 +29,8 @@ SELECT
     COALESCE(uc.account_manager_users, 0) as account_manager_users,
     COALESCE(uc.pipeline_manager_users, 0) as pipeline_manager_users,
     COALESCE(uc.analyst_users, 0) as analyst_users,
-    COALESCE(uc.guest_users, 0) as guest_users
+    COALESCE(uc.guest_users, 0) as guest_users,
+    1 as no_dimension
 FROM {{ source('django', 'orgs') }} o
 LEFT JOIN {{ source('django', 'orgplans') }} p 
     ON o.id = p.org_id
