@@ -18,7 +18,8 @@ SELECT
     fr.expected_start_time,
     fr.end_time,
     fr.total_run_time,
-    fr.work_queue_id
+    fr.work_queue_id,
+    fr.auto_scheduled
 FROM {{ ref('org_dataflows') }} od
 LEFT JOIN {{ ref('flow_runs') }} fr 
     ON od.deployment_id = fr.deployment_id

@@ -37,7 +37,9 @@ pipeline_runs_agg AS (
         COUNT(opr.flow_run_id) as total_pipeline_runs,
         COUNT(CASE WHEN opr.state_type = 'COMPLETED' THEN 1 END) as total_successful_runs,
         COUNT(CASE WHEN opr.state_type IN ('FAILED', 'CRASHED') THEN 1 END) as total_failed_runs,
-        COUNT(CASE WHEN opr.state_type NOT IN ('COMPLETED', 'FAILED', 'CRASHED') THEN 1 END) as total_other_runs
+        COUNT(CASE WHEN opr.state_type NOT IN ('COMPLETED', 'FAILED', 'CRASHED') THEN 1 END) as total_other_runs,
+        COUNT(CASE WHEN opr.auto_scheduled = TRUE THEN 1 END) as total_scheduled_runs,
+        COUNT(CASE WHEN opr.auto_scheduled = FALSE THEN 1 END) as total_manual_runs
     FROM dimension_spine ds
     LEFT JOIN {{ ref('org_pipeline_runs') }} opr 
         ON ds.org_id = opr.org_id 
