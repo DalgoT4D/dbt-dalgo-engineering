@@ -36,3 +36,12 @@ sources:
 
       - name: deployment_schedule
         identifier: deployment_schedule
+
+  - name: airbyte
+    schema: staging_airbyte
+    tables:
+      - name: jobs
+        identifier: jobs
+
+      - name: attempts
+        identifier: attempts
