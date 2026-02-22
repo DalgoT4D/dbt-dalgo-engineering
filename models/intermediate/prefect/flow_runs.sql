@@ -9,6 +9,7 @@ with flow_runs_with_queue_info as (
         fr.expected_start_time,
         fr.end_time,
         fr.total_run_time,
+        fr.auto_scheduled,
         wq.work_queue_id
     FROM {{ source('prefect', 'flow_run') }} fr
     LEFT JOIN {{ ref('work_queues') }} wq
