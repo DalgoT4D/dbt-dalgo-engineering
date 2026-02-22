@@ -41,11 +41,12 @@ SELECT
     an.internal_message,
     an.failure_count,
     jobs.id AS job_id,
-    jobs.scope,
+    jobs.scope AS connection_id,
     jobs.config_type,
     jobs.status AS job_status,
     jobs.created_at AS job_created_at,
     jobs.updated_at AS job_updated_at,
+    jobs.config::jsonb -> 'sync' ->> 'workspaceId' AS workspace_id,
     CASE 
         WHEN jobs.status = 'succeeded' 
             AND an.attempt_status = 'succeeded' 
