@@ -33,3 +33,6 @@ sources:
 
       - name: work_queue
         identifier: work_queue
+
+      - name: deployment_schedule
+        identifier: deployment_schedule
