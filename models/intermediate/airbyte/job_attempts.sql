@@ -58,6 +58,7 @@ SELECT
         WHEN jobs.status = 'failed' THEN 'failure'
         WHEN jobs.status = 'cancelled' THEN 'cancelled'
         WHEN jobs.status = 'succeeded' THEN 'success'
+        WHEN jobs.status = 'running' THEN 'running'
         ELSE 'other'
     END as classified_status
 FROM attempts_normalized as an
