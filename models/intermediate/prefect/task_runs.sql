@@ -1,3 +1,5 @@
+-- look at task runs from last 4 months
+
 WITH task_runs_filtered AS (
     SELECT 
         id as task_run_id,
@@ -12,6 +14,13 @@ WITH task_runs_filtered AS (
         created
     FROM {{ source('prefect', 'task_run') }}
     WHERE created >= CURRENT_DATE - INTERVAL '4 months'
+),
+
+task_runs_with_last_step AS (
+    SELECT 
+        *,
+        ROW_NUMBER() OVER (PARTITION BY flow_run_id ORDER BY created DESC) as rn
+    FROM task_runs_filtered
 )
 
 SELECT
@@ -20,6 +29,8 @@ SELECT
         CONCAT(task_name, '(', state_name, ')'), 
         ' -> ' 
         ORDER BY created
-    ) as flow_run_execution_chain
-FROM task_runs_filtered
+    ) as flow_run_execution_chain,
+    MAX(CASE WHEN rn = 1 THEN state_name END) as last_step_state_name,
+    MAX(CASE WHEN rn = 1 THEN task_name END) as last_step
+FROM task_runs_with_last_step
 GROUP BY flow_run_id

@@ -1,3 +1,5 @@
+-- look deployments from last 4 months
+
 WITH deployment_tasks AS (
     SELECT 
         id as deployment_id,
