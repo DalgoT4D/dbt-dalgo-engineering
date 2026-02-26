@@ -1,4 +1,4 @@
--- look deployments from last 4 months
+-- look deployments from last 5 months
 
 WITH deployment_tasks AS (
     SELECT 
@@ -32,7 +32,7 @@ WITH deployment_tasks AS (
     WHERE 
         tags IS NOT NULL AND 
         jsonb_array_length(tags::jsonb) > 0 AND 
-        created >= CURRENT_DATE - INTERVAL '4 months'
+        created >= CURRENT_DATE - INTERVAL '5 months'
 )
 
 SELECT 

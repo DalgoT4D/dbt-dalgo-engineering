@@ -1,4 +1,4 @@
--- look flow runs from last 4 months
+-- look flow runs from last 5 months
 
 with flow_runs_with_queue_info as (
     SELECT 
@@ -15,7 +15,7 @@ with flow_runs_with_queue_info as (
         wq.work_queue_id
     FROM {{ source('prefect', 'flow_run') }} fr
     LEFT JOIN {{ ref('work_queues') }} wq
-        ON fr.work_queue_id = wq.work_queue_id AND fr.created >= CURRENT_DATE - INTERVAL '4 months' 
+        ON fr.work_queue_id = wq.work_queue_id AND fr.created >= CURRENT_DATE - INTERVAL '5 months' 
 )
 
 SELECT 

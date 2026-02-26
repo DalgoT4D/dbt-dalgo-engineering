@@ -1,4 +1,4 @@
--- look at task runs from last 4 months
+-- look at task runs from last 5 months
 
 WITH task_runs_filtered AS (
     SELECT 
@@ -13,7 +13,7 @@ WITH task_runs_filtered AS (
         flow_run_id,
         created
     FROM {{ source('prefect', 'task_run') }}
-    WHERE created >= CURRENT_DATE - INTERVAL '4 months'
+    WHERE created >= CURRENT_DATE - INTERVAL '5 months'
 ),
 
 task_runs_with_last_step AS (
