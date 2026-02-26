@@ -36,6 +36,8 @@ sources:
 
       - name: deployment_schedule
         identifier: deployment_schedule
+      - name: task_run
+        identifier: task_run
 
   - name: airbyte
     schema: staging_airbyte

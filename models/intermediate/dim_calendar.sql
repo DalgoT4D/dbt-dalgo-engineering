@@ -1,7 +1,7 @@
 WITH date_spine_raw AS (
     {{ dbt_utils.date_spine(
         datepart="day",
-        start_date="current_date - interval '6 months'",
+        start_date="current_date - interval '4 months'",
         end_date="current_date"
     ) }}
 ),

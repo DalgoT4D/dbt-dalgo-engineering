@@ -35,15 +35,18 @@ pipeline_runs_agg AS (
         ds.org_slug,
         ds.work_queue_id,
         COUNT(opr.flow_run_id) as total_pipeline_runs,
-        COUNT(CASE WHEN opr.state_type = 'COMPLETED' THEN 1 END) as total_successful_runs,
-        COUNT(CASE WHEN opr.state_type IN ('FAILED', 'CRASHED') THEN 1 END) as total_failed_runs,
-        COUNT(CASE WHEN opr.state_type NOT IN ('COMPLETED', 'FAILED', 'CRASHED') THEN 1 END) as total_other_runs,
+        COUNT(CASE WHEN opr.last_step_state_name = 'Completed' THEN 1 END) as total_successful_runs,
+        COUNT(CASE WHEN opr.last_step_state_name IN ('Failed', 'Crashed') THEN 1 END) as total_failed_runs,
+        COUNT(CASE WHEN opr.last_step_state_name = 'DBT_TEST_FAILED' THEN 1 END) as total_dbt_test_failed_runs,
+        COUNT(CASE WHEN opr.last_step_cleaned = 'dbt-run' AND opr.last_step_state_name IN ('Failed', 'Crashed') THEN 1 END) as total_dbt_run_failed_runs,
         COUNT(CASE WHEN opr.auto_scheduled = TRUE THEN 1 END) as total_scheduled_runs,
         COUNT(CASE WHEN opr.auto_scheduled = FALSE THEN 1 END) as total_manual_runs,
+        COUNT(CASE WHEN opr.last_step_category = 'sync' AND opr.last_step_state_name IN ('Failed', 'Crashed') THEN 1 END) as total_airbyte_category_failed_runs,
+        COUNT(CASE WHEN opr.last_step_category = 'transform' AND opr.last_step_state_name IN ('Failed', 'Crashed') THEN 1 END) as total_transform_category_failed_runs,
         ROUND(
             CASE 
                 WHEN COUNT(opr.flow_run_id) > 0 
-                THEN (COUNT(CASE WHEN opr.state_type IN ('FAILED', 'CRASHED') THEN 1 END) * 100.0) / COUNT(opr.flow_run_id)
+                THEN (COUNT(CASE WHEN opr.last_step_state_name IN ('Failed', 'Crashed') THEN 1 END) * 100.0) / COUNT(opr.flow_run_id)
                 ELSE 0 
             END, 2
         ) as failure_rate_percentage
