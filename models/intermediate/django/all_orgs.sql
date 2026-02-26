@@ -20,6 +20,7 @@ SELECT
     o.queue_config as queue_config,
     o.viz_url as superset_viz_url,
     o.viz_login_type as superset_viz_login_type,
+    o.airbyte_workspace_id,
     p.base_plan as base_plan,
     p.features as features,
     p.subscription_duration as subscription_duration,

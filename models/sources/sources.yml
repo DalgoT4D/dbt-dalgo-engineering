@@ -16,7 +16,6 @@ sources:
         identifier: ddpui_orgdataflowv1
       - name: orgtasks
         identifier: ddpui_orgtask
-
       - name: orgplans
         identifier: ddpui_orgplans
   
@@ -27,13 +26,10 @@ sources:
         identifier: deployment
       - name: flow_run
         identifier: flow_run
-      
       - name: work_pool
         identifier: work_pool
-
       - name: work_queue
         identifier: work_queue
-
       - name: deployment_schedule
         identifier: deployment_schedule
       - name: task_run
@@ -44,6 +40,13 @@ sources:
     tables:
       - name: jobs
         identifier: jobs
-
       - name: attempts
         identifier: attempts
+      - name: actor
+        identifier: actor
+      - name: actor_definition
+        identifier: actor_definition
+      - name: actor_definition_version
+        identifier: actor_definition_version
+      - name: scoped_configuration
+        identifier: scoped_configuration
