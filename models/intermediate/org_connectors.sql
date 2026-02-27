@@ -10,8 +10,8 @@ SELECT
     a.actor_tombstone,
     a.actor_definition_tombstone,
     a.connector_source,
-    a.default_docker_image_tag,
-    a.default_docker_image_repository,
+    a.default_docker_image_tag as workspace_docker_image_tag,
+    a.default_docker_image_repository as workspace_docker_image_repository,
     COALESCE(a.current_docker_image_tag, a.default_docker_image_tag) as current_docker_image_tag,
     COALESCE(a.current_docker_image_repository, a.default_docker_image_repository) as current_docker_image_repository,
     a.actor_type as connector_type
