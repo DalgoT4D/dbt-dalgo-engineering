@@ -49,7 +49,10 @@ pipeline_runs_agg AS (
                 THEN (COUNT(CASE WHEN opr.last_step_state_name IN ('Failed', 'Crashed') THEN 1 END) * 100.0) / COUNT(opr.flow_run_id)
                 ELSE 0 
             END, 2
-        ) as failure_rate_percentage
+        ) as failure_rate_percentage,
+        ROUND(AVG(opr.start_delay_minutes), 2) as avg_start_delay_minutes,
+        ROUND(PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY opr.start_delay_minutes)::numeric, 2) as median_start_delay_minutes,
+        ROUND(PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY opr.start_delay_minutes)::numeric, 2) as p95_start_delay_minutes
     FROM dimension_spine ds
     LEFT JOIN {{ ref('org_pipeline_runs') }} opr 
         ON ds.org_id = opr.org_id 
