@@ -13,7 +13,7 @@ WITH task_runs_filtered AS (
         flow_run_id,
         created
     FROM {{ source('prefect', 'task_run') }}
-    WHERE created >= CURRENT_DATE - INTERVAL '5 months'
+    WHERE created >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '5 months')
 ),
 
 task_runs_with_last_step AS (

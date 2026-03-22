@@ -4,7 +4,7 @@ WITH latest_attempts AS (
         job_id,
         MAX(attempt_number) as max_attempt_number
     FROM {{ source('airbyte', 'attempts') }}
-    WHERE created_at >= CURRENT_DATE - INTERVAL '2 months'
+    WHERE created_at >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '2 months')
     GROUP BY id, job_id
 ),
 attempts_normalized AS (

@@ -32,7 +32,7 @@ WITH deployment_tasks AS (
     WHERE 
         tags IS NOT NULL AND 
         jsonb_array_length(tags::jsonb) > 0 AND 
-        created >= CURRENT_DATE - INTERVAL '5 months'
+        created >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '5 months')
 )
 
 SELECT 
