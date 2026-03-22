@@ -50,3 +50,6 @@ sources:
         identifier: actor_definition_version
       - name: scoped_configuration
         identifier: scoped_configuration
+
+      - name: sync_stats
+        identifier: sync_stats

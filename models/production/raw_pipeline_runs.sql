@@ -1,5 +1,6 @@
 SELECT 
     org_name,
+    dataflow_name as pipeline_name,
     dataflow_deployment_name as deployment_name,
     deployment_id,
     state_name as status,

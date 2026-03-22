@@ -26,6 +26,33 @@ attempts_normalized AS (
     INNER JOIN latest_attempts la
         ON a.id = la.attempt_id
         AND a.attempt_number = la.max_attempt_number
+),
+sync_stats_agg AS (
+    SELECT 
+        attempt_id,
+        SUM(records_emitted) as total_records_emitted,
+        SUM(bytes_emitted) as total_bytes_emitted,
+        SUM(records_committed) as total_records_committed,
+        SUM(bytes_committed) as total_bytes_committed,
+        SUM(records_rejected) as total_records_rejected,
+        SUM(estimated_records) as total_estimated_records,
+        SUM(estimated_bytes) as total_estimated_bytes
+    FROM {{ source('airbyte', 'sync_stats') }}
+    GROUP BY attempt_id
+),
+attempts_normalized_with_stats AS (
+    SELECT
+        an.*,
+        ss.total_records_emitted,
+        ss.total_bytes_emitted,
+        ss.total_records_committed,
+        ss.total_bytes_committed,
+        ss.total_records_rejected,
+        ss.total_estimated_records,
+        ss.total_estimated_bytes
+    FROM attempts_normalized an
+    LEFT JOIN sync_stats_agg ss
+        ON an.attempt_id = ss.attempt_id
 )
 SELECT 
     an.attempt_id,
@@ -47,6 +74,13 @@ SELECT
     jobs.created_at AS job_created_at,
     jobs.updated_at AS job_updated_at,
     jobs.config::jsonb -> 'sync' ->> 'workspaceId' AS workspace_id,
+    an.total_records_emitted,
+    an.total_bytes_emitted,
+    an.total_records_committed,
+    an.total_bytes_committed,
+    an.total_records_rejected,
+    an.total_estimated_records,
+    an.total_estimated_bytes,
     CASE 
         WHEN jobs.status = 'succeeded' 
             AND an.attempt_status = 'succeeded' 
@@ -61,6 +95,6 @@ SELECT
         WHEN jobs.status = 'running' THEN 'running'
         ELSE 'other'
     END as classified_status
-FROM attempts_normalized as an
+FROM attempts_normalized_with_stats as an
 INNER JOIN {{ source('airbyte', 'jobs') }} jobs
 ON an.job_id = jobs.id
