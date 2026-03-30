@@ -18,6 +18,12 @@ sources:
         identifier: ddpui_orgtask
       - name: orgplans
         identifier: ddpui_orgplans
+      - name: report_snapshot
+        identifier: report_snapshot
+      - name: comment
+        identifier: comment
+      - name: comment_status
+        identifier: comment_status
   
   - name: prefect
     schema: staging_prefect
