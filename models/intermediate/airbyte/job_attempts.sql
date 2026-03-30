@@ -81,12 +81,12 @@ SELECT
     an.total_records_rejected,
     an.total_estimated_records,
     an.total_estimated_bytes,
-    CASE 
-        WHEN jobs.status = 'succeeded' 
-            AND an.attempt_status = 'succeeded' 
-            AND (an.failure_type IS NOT NULL 
-                 OR an.failure_origin IS NOT NULL 
-                 OR an.external_message IS NOT NULL 
+    CASE
+        WHEN jobs.status = 'succeeded'
+            AND an.attempt_status = 'succeeded'
+            AND (an.failure_type IS NOT NULL
+                 OR an.failure_origin IS NOT NULL
+                 OR an.external_message IS NOT NULL
                  OR an.internal_message IS NOT NULL)
         THEN 'silent_failure'
         WHEN jobs.status = 'failed' THEN 'failure'
@@ -94,7 +94,11 @@ SELECT
         WHEN jobs.status = 'succeeded' THEN 'success'
         WHEN jobs.status = 'running' THEN 'running'
         ELSE 'other'
-    END as classified_status
+    END as classified_status,
+    CASE
+        WHEN jobs.status = 'running'
+        THEN ROUND(EXTRACT(EPOCH FROM (NOW() - jobs.created_at)) / 3600, 2)
+    END as running_duration_hours
 FROM attempts_normalized_with_stats as an
 INNER JOIN {{ source('airbyte', 'jobs') }} jobs
 ON an.job_id = jobs.id

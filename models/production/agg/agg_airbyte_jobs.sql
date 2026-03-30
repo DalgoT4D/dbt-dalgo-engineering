@@ -7,6 +7,7 @@ WITH dimension_spine AS (
         c.year,
         c.month
     FROM {{ ref('dim_calendar') }} c
+    WHERE c.date_day >= DATE_TRUNC('month', CURRENT_DATE - INTERVAL '2 months')
 ),
 
 airbyte_jobs_agg AS (
