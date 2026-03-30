@@ -24,6 +24,12 @@ sources:
         identifier: comment
       - name: comment_status
         identifier: comment_status
+      - name: dashboard
+        identifier: dashboard
+      - name: dashboard_filter
+        identifier: dashboard_filter
+      - name: ddpui_chart
+        identifier: ddpui_chart
   
   - name: prefect
     schema: staging_prefect
