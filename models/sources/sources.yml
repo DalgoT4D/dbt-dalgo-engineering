@@ -65,3 +65,9 @@ sources:
 
       - name: sync_stats
         identifier: sync_stats
+
+  - name: support
+    schema: staging_support
+    tables:
+      - name: support_tickets
+        identifier: Support_Tickets
