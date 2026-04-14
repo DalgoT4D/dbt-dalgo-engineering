@@ -47,6 +47,7 @@ monthly_uptime AS (
 
 SELECT
     beat_month,
+    TO_CHAR(beat_month, 'Mon YYYY')                                         AS beat_month_label,
     monitor_id,
     monitor_name,
     monitor_group,
