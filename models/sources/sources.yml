@@ -71,3 +71,11 @@ sources:
     tables:
       - name: support_tickets
         identifier: Support_Tickets
+
+  - name: uptime
+    schema: staging_uptime
+    tables:
+      - name: beats
+        identifier: Beats
+      - name: monitors
+        identifier: Monitors
