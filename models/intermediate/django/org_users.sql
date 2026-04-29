@@ -1,4 +1,5 @@
-SELECT 
+SELECT
+    ou.id as orguser_id,
     ou.org_id,
     au.email as user_email,
     r.slug as role_slug,
