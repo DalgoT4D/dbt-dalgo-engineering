@@ -31,6 +31,10 @@ SELECT
     COALESCE(uc.pipeline_manager_users, 0) as pipeline_manager_users,
     COALESCE(uc.analyst_users, 0) as analyst_users,
     COALESCE(uc.guest_users, 0) as guest_users,
+    COALESCE((o.queue_config::json->'edr_queue'->>'is_workpool_eks')::boolean, false) as edr_queue_is_eks,
+    COALESCE((o.queue_config::json->'transform_task_queue'->>'is_workpool_eks')::boolean, false) as transform_task_queue_is_eks,
+    COALESCE((o.queue_config::json->'connection_sync_queue'->>'is_workpool_eks')::boolean, false) as connection_sync_queue_is_eks,
+    COALESCE((o.queue_config::json->'scheduled_pipeline_queue'->>'is_workpool_eks')::boolean, false) as scheduled_pipeline_queue_is_eks,
     1 as no_dimension
 FROM {{ source('django', 'orgs') }} o
 LEFT JOIN {{ source('django', 'orgplans') }} p 
