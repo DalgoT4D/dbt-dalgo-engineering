@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./profiles.yml)",
+      "Edit(./profiles.yml)",
+      "Write(./profiles.yml)",
+      "Read(./.user.yml)",
+      "Edit(./.user.yml)",
+      "Write(./.user.yml)"
+    ]
+  }
+}
