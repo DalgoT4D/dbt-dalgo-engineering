@@ -1,6 +1,9 @@
 SELECT
     ou.id as orguser_id,
     ou.org_id,
+    ou.created_at as orguser_created_at,
+    ou.updated_at as orguser_updated_at,
+    au.id as user_id,
     au.email as user_email,
     r.slug as role_slug,
     r.name as role_name,
