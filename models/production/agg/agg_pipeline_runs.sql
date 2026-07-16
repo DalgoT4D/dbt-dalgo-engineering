@@ -34,7 +34,7 @@ pipeline_runs_agg AS (
         ds.org_name,
         ds.org_slug,
         ds.work_queue_id,
-        COUNT(opr.flow_run_id) as total_pipeline_runs,
+        COUNT(DISTINCT opr.flow_run_id) as total_pipeline_runs,
         COUNT(CASE WHEN opr.last_step_state_name = 'Completed' THEN 1 END) as total_successful_runs,
         COUNT(CASE WHEN opr.last_step_state_name IN ('Failed', 'Crashed') THEN 1 END) as total_failed_runs,
         COUNT(CASE WHEN opr.last_step_state_name = 'DBT_TEST_FAILED' THEN 1 END) as total_dbt_test_failed_runs,
@@ -43,13 +43,7 @@ pipeline_runs_agg AS (
         COUNT(CASE WHEN opr.auto_scheduled = FALSE THEN 1 END) as total_manual_runs,
         COUNT(CASE WHEN opr.last_step_category = 'sync' AND opr.last_step_state_name IN ('Failed', 'Crashed') THEN 1 END) as total_airbyte_category_failed_runs,
         COUNT(CASE WHEN opr.last_step_category = 'transform' AND opr.last_step_state_name IN ('Failed', 'Crashed') THEN 1 END) as total_transform_category_failed_runs,
-        ROUND(
-            CASE 
-                WHEN COUNT(opr.flow_run_id) > 0 
-                THEN (COUNT(CASE WHEN opr.last_step_state_name IN ('Failed', 'Crashed') THEN 1 END) * 100.0) / COUNT(opr.flow_run_id)
-                ELSE 0 
-            END, 2
-        ) as failure_rate_percentage,
+        ROUND(SUM(opr.total_run_time_minutes), 2) as total_run_time_minutes,
         ROUND(AVG(opr.start_delay_minutes), 2) as avg_start_delay_minutes,
         ROUND(PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY opr.start_delay_minutes)::numeric, 2) as median_start_delay_minutes,
         ROUND(PERCENTILE_CONT(0.95) WITHIN GROUP (ORDER BY opr.start_delay_minutes)::numeric, 2) as p95_start_delay_minutes

@@ -23,6 +23,7 @@ SELECT
     fr.expected_start_time,
     fr.end_time,
     fr.total_run_time,
+    ROUND((EXTRACT(EPOCH FROM fr.total_run_time::interval) / 60.0)::numeric, 2) as total_run_time_minutes,
     fr.work_queue_id,
     fr.auto_scheduled,
     (EXTRACT(EPOCH FROM (fr.start_time - fr.expected_start_time))/60)::numeric as start_delay_minutes
