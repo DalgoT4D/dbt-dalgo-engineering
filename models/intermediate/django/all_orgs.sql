@@ -1,12 +1,11 @@
 WITH user_counts AS (
-    SELECT 
+    SELECT
         org_id,
         COUNT(*) as total_users,
         COUNT(CASE WHEN role_slug = 'super-admin' THEN 1 END) as super_admin_users,
-        COUNT(CASE WHEN role_slug = 'account-manager' THEN 1 END) as account_manager_users,
-        COUNT(CASE WHEN role_slug = 'pipeline-manager' THEN 1 END) as pipeline_manager_users,
+        COUNT(CASE WHEN role_slug = 'admin' THEN 1 END) as admin_users,
         COUNT(CASE WHEN role_slug = 'analyst' THEN 1 END) as analyst_users,
-        COUNT(CASE WHEN role_slug = 'guest' THEN 1 END) as guest_users
+        COUNT(CASE WHEN role_slug = 'member' THEN 1 END) as member_users
     FROM {{ ref('org_users') }}
     GROUP BY org_id
 )
@@ -27,10 +26,9 @@ SELECT
     p.superset_included as superset_included,
     COALESCE(uc.total_users, 0) as total_users,
     COALESCE(uc.super_admin_users, 0) as super_admin_users,
-    COALESCE(uc.account_manager_users, 0) as account_manager_users,
-    COALESCE(uc.pipeline_manager_users, 0) as pipeline_manager_users,
+    COALESCE(uc.admin_users, 0) as admin_users,
     COALESCE(uc.analyst_users, 0) as analyst_users,
-    COALESCE(uc.guest_users, 0) as guest_users,
+    COALESCE(uc.member_users, 0) as member_users,
     COALESCE((o.queue_config::json->'edr_queue'->>'is_workpool_eks')::boolean, false) as edr_queue_is_eks,
     COALESCE((o.queue_config::json->'transform_task_queue'->>'is_workpool_eks')::boolean, false) as transform_task_queue_is_eks,
     COALESCE((o.queue_config::json->'connection_sync_queue'->>'is_workpool_eks')::boolean, false) as connection_sync_queue_is_eks,
