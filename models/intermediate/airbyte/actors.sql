@@ -1,4 +1,5 @@
-SELECT 
+SELECT
+    actor.id as actor_id,
     actor.workspace_id,
     actor.name as actor_name,
     actor.actor_type,

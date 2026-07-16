@@ -4,6 +4,7 @@ SELECT
     o.org_slug,
     o.base_plan,
     o.airbyte_workspace_id,
+    a.actor_id,
     a.actor_name,
     a.actor_type,
     a.actor_definition_id,
