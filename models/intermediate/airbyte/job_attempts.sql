@@ -54,7 +54,7 @@ attempts_normalized_with_stats AS (
     LEFT JOIN sync_stats_agg ss
         ON an.attempt_id = ss.attempt_id
 )
-SELECT 
+SELECT
     an.attempt_id,
     an.attempt_number,
     an.attempt_status,
@@ -74,6 +74,9 @@ SELECT
     jobs.created_at AS job_created_at,
     jobs.updated_at AS job_updated_at,
     jobs.config::jsonb -> 'sync' ->> 'workspaceId' AS workspace_id,
+    o.org_id,
+    o.org_name,
+    o.org_slug,
     an.total_records_emitted,
     an.total_bytes_emitted,
     an.total_records_committed,
@@ -97,8 +100,18 @@ SELECT
     END as classified_status,
     CASE
         WHEN jobs.status = 'running'
-        THEN ROUND(EXTRACT(EPOCH FROM (NOW() - jobs.created_at)) / 3600, 2)
-    END as running_duration_hours
+            THEN ROUND(EXTRACT(EPOCH FROM (NOW() - jobs.created_at)) / 60.0, 2)
+        WHEN an.attempt_ended_at IS NOT NULL
+            THEN ROUND(EXTRACT(EPOCH FROM (an.attempt_ended_at - jobs.created_at)) / 60.0, 2)
+    END as sync_duration_minutes,
+    CASE
+        WHEN jobs.status = 'running'
+            THEN ROUND(EXTRACT(EPOCH FROM (NOW() - jobs.created_at)) / 3600.0, 2)
+        WHEN an.attempt_ended_at IS NOT NULL
+            THEN ROUND(EXTRACT(EPOCH FROM (an.attempt_ended_at - jobs.created_at)) / 3600.0, 2)
+    END as sync_duration_hours
 FROM attempts_normalized_with_stats as an
 INNER JOIN {{ source('airbyte', 'jobs') }} jobs
-ON an.job_id = jobs.id
+    ON an.job_id = jobs.id
+LEFT JOIN {{ ref('all_orgs') }} o
+    ON jobs.config::jsonb -> 'sync' ->> 'workspaceId' = o.airbyte_workspace_id
